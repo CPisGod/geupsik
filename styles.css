@@ -1,0 +1,526 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #e8d5e0;
+    border-radius: 15px;
+    padding: 30px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-height: calc(100vh - 40px);
+}
+
+/* 화면 표시 관리 */
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+.home-screen {
+    display: none;
+}
+
+.date-header {
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+/* 캘린더 스타일 */
+.calendar {
+    margin-bottom: 30px;
+}
+
+.calendar-header {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.month-nav {
+    background-color: #8e7cc3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.month-nav:hover {
+    background-color: #7b6ba8;
+}
+
+.month-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.calendar-month {
+    font-size: 14px;
+    color: #666;
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.weekday {
+    text-align: center;
+    padding: 8px;
+    font-weight: bold;
+    font-size: 12px;
+    color: white;
+    border-radius: 5px;
+}
+
+.weekday.sun { background-color: #ff4444; }
+.weekday.mon { background-color: #333; }
+.weekday.tue { background-color: #333; }
+.weekday.wed { background-color: #333; }
+.weekday.thu { background-color: #333; }
+.weekday.fri { background-color: #333; }
+.weekday.sat { background-color: #4444ff; }
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    border: 2px solid #333;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: white;
+    transition: background-color 0.2s;
+    position: relative;
+}
+
+.calendar-day:hover {
+    background-color: #f0f0f0;
+}
+
+.calendar-day.sunday {
+    color: #ff4444;
+}
+
+.calendar-day.saturday {
+    color: #4444ff;
+}
+
+.calendar-day.today {
+    background-color: #ffeb3b;
+    font-weight: bold;
+}
+
+.calendar-day.empty {
+    border: none;
+    cursor: default;
+    background-color: transparent;
+}
+
+.calendar-day.empty:hover {
+    background-color: transparent;
+}
+
+/* 알러지 정보 표 */
+.allergy-table {
+    background-color: white;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.allergy-table h3 {
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 8px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.allergy-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+}
+
+.allergy-item {
+    background-color: #f9f9f9;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: #555;
+    border: 1px solid #e8e8e8;
+    text-align: center;
+}
+
+.allergy-num {
+    font-weight: bold;
+    color: #ff6b6b;
+    font-size: 10px;
+}
+
+/* 급식 화면 스타일 */
+.meal-section {
+    margin-bottom: 25px;
+}
+
+.meal-card {
+    background-color: #fafafa;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.meal-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.meal-content {
+    font-size: 16px;
+    color: #444;
+    line-height: 1.6;
+}
+
+.meal-item {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.menu-name {
+    font-weight: 500;
+}
+
+.allergy-info {
+    color: #ff6b6b;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.calorie-info {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px dashed #ddd;
+    font-size: 15px;
+    font-weight: bold;
+    color: #4a90e2;
+}
+
+.loading {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+}
+
+/* 네비게이션 버튼 */
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.nav-button {
+    background-color: #8e7cc3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+    background-color: #7b6ba8;
+}
+
+.nav-button:active {
+    transform: translateY(1px);
+}
+
+/* 동그란 플로팅 네비게이션 버튼 */
+.floating-nav {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.floating-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #8e7cc3;
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.floating-button:hover {
+    background-color: #7b6ba8;
+    transform: scale(1.1);
+}
+
+.floating-button.active {
+    background-color: #6a5a98;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(1.15);
+}
+
+.floating-button:active {
+    transform: scale(1.05);
+}
+
+/* 의견함 스타일 */
+.feedback-screen {
+    padding: 20px;
+}
+
+.feedback-form {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-form h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.feedback-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 15px;
+}
+
+.feedback-form textarea:focus {
+    outline: none;
+    border-color: #8e7cc3;
+}
+
+.submit-button {
+    width: 100%;
+    background-color: #8e7cc3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #7b6ba8;
+}
+
+.admin-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-section h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.admin-login {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.admin-login input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.admin-login input:focus {
+    outline: none;
+    border-color: #8e7cc3;
+}
+
+.admin-button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    white-space: nowrap;
+}
+
+.admin-button:hover {
+    background-color: #357abd;
+}
+
+.feedback-list {
+    margin-top: 20px;
+}
+
+.feedback-list h4 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.feedback-item {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.feedback-date {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.feedback-text {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+}
+
+.delete-button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+    background-color: #ee5a52;
+}
+
+.clear-button {
+    width: 100%;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.clear-button:hover {
+    background-color: #ee5a52;
+}
+
+.no-feedback {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+    font-size: 14px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 20px 15px;
+    }
+    
+    .date-header {
+        font-size: 24px;
+    }
+    
+    .floating-nav {
+        right: 15px;
+    }
+    
+    .floating-button {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .allergy-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

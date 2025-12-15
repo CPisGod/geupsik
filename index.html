@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>급식 정보 앱</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 홈 화면 (달력) -->
+        <div id="homeScreen" class="screen home-screen">
+            <div class="date-header" id="homeDate">2025.01.01</div>
+            
+            <div class="calendar">
+                <div class="calendar-header">
+                    <button class="month-nav" onclick="changeMonth(-1)">◀</button>
+                    <div class="month-info">
+                        <div id="calendarMonth">January</div>
+                        <div class="calendar-month" id="calendarYear">2025.01</div>
+                    </div>
+                    <button class="month-nav" onclick="changeMonth(1)">▶</button>
+                </div>
+                
+                <div class="weekdays">
+                    <div class="weekday sun">SUN</div>
+                    <div class="weekday mon">MON</div>
+                    <div class="weekday tue">TUE</div>
+                    <div class="weekday wed">WED</div>
+                    <div class="weekday thu">THU</div>
+                    <div class="weekday fri">FRI</div>
+                    <div class="weekday sat">SAT</div>
+                </div>
+                
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- 캘린더 날짜들이 여기에 생성됩니다 -->
+                </div>
+            </div>
+
+            <!-- 알러지 정보 표 -->
+            <div class="allergy-table">
+                <h3>알러지 정보</h3>
+                <div class="allergy-grid">
+                    <div class="allergy-item"><span class="allergy-num">1.</span> 난류</div>
+                    <div class="allergy-item"><span class="allergy-num">2.</span> 우유</div>
+                    <div class="allergy-item"><span class="allergy-num">3.</span> 메밀</div>
+                    <div class="allergy-item"><span class="allergy-num">4.</span> 땅콩</div>
+                    <div class="allergy-item"><span class="allergy-num">5.</span> 대두</div>
+                    <div class="allergy-item"><span class="allergy-num">6.</span> 밀</div>
+                    <div class="allergy-item"><span class="allergy-num">7.</span> 고등어</div>
+                    <div class="allergy-item"><span class="allergy-num">8.</span> 게</div>
+                    <div class="allergy-item"><span class="allergy-num">9.</span> 새우</div>
+                    <div class="allergy-item"><span class="allergy-num">10.</span> 돼지고기</div>
+                    <div class="allergy-item"><span class="allergy-num">11.</span> 복숭아</div>
+                    <div class="allergy-item"><span class="allergy-num">12.</span> 토마토</div>
+                    <div class="allergy-item"><span class="allergy-num">13.</span> 아황산류</div>
+                    <div class="allergy-item"><span class="allergy-num">14.</span> 호두</div>
+                    <div class="allergy-item"><span class="allergy-num">15.</span> 닭고기</div>
+                    <div class="allergy-item"><span class="allergy-num">16.</span> 쇠고기</div>
+                    <div class="allergy-item"><span class="allergy-num">17.</span> 오징어</div>
+                    <div class="allergy-item"><span class="allergy-num">18.</span> 조개류</div>
+                    <div class="allergy-item"><span class="allergy-num">19.</span> 잣</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 급식 화면 -->
+        <div id="mealScreen" class="screen meal-screen">
+            <div class="navigation">
+                <button class="nav-button" onclick="changeDate(-1)">◀ 이전</button>
+                <button class="nav-button" onclick="changeDate(1)">다음 ▶</button>
+            </div>
+            
+            <div class="date-header" id="mealDate">2025.09.01</div>
+            
+            <div id="mealContainer">
+                <div class="meal-section" data-meal-type="1">
+                    <div class="meal-card">
+                        <div class="meal-title">조식</div>
+                        <div class="meal-content">
+                            <div class="loading">급식 정보를 불러오는 중...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="meal-section" data-meal-type="2">
+                    <div class="meal-card">
+                        <div class="meal-title">중식</div>
+                        <div class="meal-content">
+                            <div class="loading">급식 정보를 불러오는 중...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="meal-section" data-meal-type="3">
+                    <div class="meal-card">
+                        <div class="meal-title">석식</div>
+                        <div class="meal-content">
+                            <div class="loading">급식 정보를 불러오는 중...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 의견함 화면 -->
+        <div id="feedbackScreen" class="screen feedback-screen">
+            <div class="date-header">의견함</div>
+            
+            <div class="feedback-form">
+                <h3>의견 작성</h3>
+                <textarea id="feedbackText" placeholder="의견을 작성해주세요..." rows="5"></textarea>
+                <button class="submit-button" onclick="submitFeedback()">제출</button>
+            </div>
+
+            <div class="admin-section">
+                <h3>관리자 전용</h3>
+                <div class="admin-login">
+                    <input type="password" id="adminPassword" placeholder="관리자 비밀번호">
+                    <button class="admin-button" onclick="viewFeedbacks()">의견 보기</button>
+                </div>
+                
+                <div id="feedbackList" class="feedback-list" style="display: none;">
+                    <h4>제출된 의견 목록</h4>
+                    <div id="feedbackItems"></div>
+                    <button class="clear-button" onclick="clearAllFeedbacks()">모두 삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 동그란 네비게이션 버튼들 -->
+    <div class="floating-nav">
+        <button class="floating-button active" onclick="showTodayMeal()" title="오늘의 급식">
+            🍚
+        </button>
+        <button class="floating-button" onclick="showCalendarScreen()" title="달력">
+            📅
+        </button>
+        <button class="floating-button" onclick="showFeedbackScreen()" title="의견함">
+            💬
+        </button>
+    </div>
+
+    <script src="home.js"></script>
+    <script src="meal.js"></script>
+    <script src="feedback.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
