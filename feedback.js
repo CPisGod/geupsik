@@ -29,7 +29,7 @@ function submitFeedback() {
     alert('GitHub Issues 페이지가 열립니다.\n의견을 확인하고 "Submit new issue" 버튼을 눌러주세요!');
 }
 
-// 관리자 의견 보기 (GitHub Issues 페이지로 이동)
+// 관리자 의견 보기 (admin.html 페이지로 이동)
 function viewFeedbacks() {
     const password = document.getElementById('adminPassword').value;
     const ADMIN_PASSWORD = 'admin';
@@ -39,12 +39,8 @@ function viewFeedbacks() {
         return;
     }
     
-    // GitHub Issues 목록 페이지로 이동
-    const issuesUrl = `https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}/issues?q=is%3Aissue+급식+의견`;
-    
-    window.open(issuesUrl, '_blank');
-    
-    alert('GitHub Issues 페이지가 열립니다.\n제출된 모든 의견을 확인할 수 있습니다!');
+    // admin.html 페이지로 이동
+    window.location.href = 'admin.html';
 }
 
 // 특정 의견 삭제 (GitHub에서 직접 삭제)
