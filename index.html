@@ -110,25 +110,16 @@
             <div class="date-header">의견함</div>
             
             <div class="feedback-form">
-                <h3>💬 의견 작성</h3>
-                <p class="info-text">
-                    <strong>📝 Google Forms를 통해 의견을 제출합니다.</strong><br>
-                    • 로그인 없이 익명으로 제출 가능합니다<br>
-                    • 제출된 의견은 관리자만 확인할 수 있습니다
-                </p>
-                <textarea id="feedbackText" placeholder="의견을 미리 작성해보세요 (선택사항)..." rows="5"></textarea>
-                <button class="submit-button" onclick="submitFeedback()">📝 Google Forms로 제출하기</button>
-                <p class="small-text">※ 버튼을 누르면 Google Forms 페이지가 열립니다</p>
+                <h3>의견 작성</h3>
+                <textarea id="feedbackText" placeholder="의견을 작성해주세요..." rows="5"></textarea>
+                <button class="submit-button" onclick="submitFeedback()">제출하기</button>
             </div>
 
             <div class="admin-section">
-                <h3>👨‍💼 관리자 전용</h3>
-                <p class="info-text">
-                    Google Sheets에서 제출된 모든 의견을 확인할 수 있습니다.
-                </p>
+                <h3>관리자 전용</h3>
                 <div class="admin-login">
                     <input type="password" id="adminPassword" placeholder="관리자 비밀번호">
-                    <button class="admin-button" onclick="viewFeedbacks()">📊 의견 확인하기</button>
+                    <button class="admin-button" onclick="viewFeedbacks()">의견 확인</button>
                 </div>
             </div>
         </div>
