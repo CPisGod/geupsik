@@ -353,6 +353,13 @@ body {
     border-left: 3px solid #4a90e2;
 }
 
+.small-text {
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    margin-top: 10px;
+}
+
 .feedback-form textarea {
     width: 100%;
     padding: 12px;
