@@ -1,0 +1,100 @@
+name: Save Feedback to JSON
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  save-feedback:
+    # 제목이 "급식 의견"인 이슈만 처리
+    if: contains(github.event.issue.title, '급식 의견')
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      issues: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      
+      - name: Save feedback to JSON
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_USER: ${{ github.event.issue.user.login }}
+          ISSUE_CREATED: ${{ github.event.issue.created_at }}
+        run: |
+          python3 << 'EOF'
+          import json
+          import os
+          from datetime import datetime
+
+          # 환경 변수에서 이슈 정보 가져오기
+          issue_number = os.environ['ISSUE_NUMBER']
+          issue_title = os.environ['ISSUE_TITLE']
+          issue_body = os.environ['ISSUE_BODY']
+          issue_user = os.environ['ISSUE_USER']
+          issue_created = os.environ['ISSUE_CREATED']
+
+          # feedbacks.json 파일 읽기 (없으면 생성)
+          try:
+              with open('feedbacks.json', 'r', encoding='utf-8') as f:
+                  feedbacks = json.load(f)
+          except FileNotFoundError:
+              feedbacks = []
+
+          # 새 피드백 추가
+          new_feedback = {
+              "id": int(issue_number),
+              "title": issue_title,
+              "content": issue_body,
+              "author": issue_user,
+              "created_at": issue_created,
+              "issue_url": f"https://github.com/${{github.repository}}/issues/{issue_number}"
+          }
+          
+          feedbacks.append(new_feedback)
+
+          # JSON 파일에 저장
+          with open('feedbacks.json', 'w', encoding='utf-8') as f:
+              json.dump(feedbacks, f, ensure_ascii=False, indent=2)
+
+          print(f"✅ Feedback #{issue_number} saved successfully!")
+          EOF
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add feedbacks.json
+          git commit -m "Add feedback from issue #${{ github.event.issue.number }}"
+          git push
+      
+      - name: Add comment to issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ 의견이 저장되었습니다! 관리자가 확인할 수 있습니다.'
+            })
+      
+      - name: Close issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed'
+            })
