@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>급식의 민족</title>
+    <title>급식 정보 앱</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     <link rel="stylesheet" href="styles.css">
@@ -111,21 +111,17 @@
             
             <div class="feedback-form">
                 <h3>의견 작성</h3>
+                <p class="info-text">의견을 작성하시면 GitHub Issues로 이동합니다.<br>GitHub 계정으로 로그인하여 제출해주세요.</p>
                 <textarea id="feedbackText" placeholder="의견을 작성해주세요..." rows="5"></textarea>
-                <button class="submit-button" onclick="submitFeedback()">제출</button>
+                <button class="submit-button" onclick="submitFeedback()">GitHub Issues로 제출</button>
             </div>
 
             <div class="admin-section">
                 <h3>관리자 전용</h3>
+                <p class="info-text">GitHub Issues 페이지에서 제출된 의견을 확인할 수 있습니다.</p>
                 <div class="admin-login">
                     <input type="password" id="adminPassword" placeholder="관리자 비밀번호">
-                    <button class="admin-button" onclick="viewFeedbacks()">의견 보기</button>
-                </div>
-                
-                <div id="feedbackList" class="feedback-list" style="display: none;">
-                    <h4>제출된 의견 목록</h4>
-                    <div id="feedbackItems"></div>
-                    <button class="clear-button" onclick="clearAllFeedbacks()">모두 삭제</button>
+                    <button class="admin-button" onclick="viewFeedbacks()">GitHub에서 의견 보기</button>
                 </div>
             </div>
         </div>

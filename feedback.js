@@ -1,6 +1,7 @@
 // 의견함 관련 함수들
-const ADMIN_PASSWORD = 'admin';
-const FEEDBACK_STORAGE_KEY = 'meal_feedbacks';
+// GitHub 리포지토리 정보 (본인의 정보로 수정하세요!)
+const GITHUB_USERNAME = 'cpisgod';  // 여기에 본인의 GitHub 사용자명 입력
+const GITHUB_REPO = 'cpisgod.github.io';  // 여기에 리포지토리 이름 입력
 
 // 의견 제출
 function submitFeedback() {
@@ -11,88 +12,48 @@ function submitFeedback() {
         return;
     }
     
-    // 기존 의견 가져오기
-    const feedbacks = getFeedbacks();
+    // GitHub Issues 생성 페이지로 이동
+    const issueTitle = encodeURIComponent('급식 의견');
+    const issueBody = encodeURIComponent(
+        `## 제출 내용\n\n${feedbackText}\n\n---\n제출 시간: ${new Date().toLocaleString('ko-KR')}`
+    );
     
-    // 새 의견 추가
-    const newFeedback = {
-        id: Date.now(),
-        text: feedbackText,
-        date: new Date().toLocaleString('ko-KR')
-    };
+    const githubUrl = `https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}/issues/new?title=${issueTitle}&body=${issueBody}`;
     
-    feedbacks.push(newFeedback);
-    
-    // localStorage에 저장
-    localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(feedbacks));
+    // 새 창으로 GitHub Issues 페이지 열기
+    window.open(githubUrl, '_blank');
     
     // 입력창 초기화
     document.getElementById('feedbackText').value = '';
     
-    alert('의견이 제출되었습니다. 감사합니다!');
+    alert('GitHub Issues 페이지가 열립니다.\n의견을 확인하고 "Submit new issue" 버튼을 눌러주세요!');
 }
 
-// 저장된 의견 가져오기
-function getFeedbacks() {
-    const stored = localStorage.getItem(FEEDBACK_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
-}
-
-// 관리자 의견 보기
+// 관리자 의견 보기 (GitHub Issues 페이지로 이동)
 function viewFeedbacks() {
     const password = document.getElementById('adminPassword').value;
+    const ADMIN_PASSWORD = 'admin';
     
     if (password !== ADMIN_PASSWORD) {
         alert('비밀번호가 올바르지 않습니다.');
         return;
     }
     
-    const feedbacks = getFeedbacks();
-    const feedbackList = document.getElementById('feedbackList');
-    const feedbackItems = document.getElementById('feedbackItems');
+    // GitHub Issues 목록 페이지로 이동
+    const issuesUrl = `https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}/issues?q=is%3Aissue+급식+의견`;
     
-    if (feedbacks.length === 0) {
-        feedbackItems.innerHTML = '<div class="no-feedback">아직 제출된 의견이 없습니다.</div>';
-    } else {
-        let html = '';
-        feedbacks.reverse().forEach(feedback => {
-            html += `
-                <div class="feedback-item">
-                    <div class="feedback-date">${feedback.date}</div>
-                    <div class="feedback-text">${feedback.text}</div>
-                    <button class="delete-button" onclick="deleteFeedback(${feedback.id})">삭제</button>
-                </div>
-            `;
-        });
-        feedbackItems.innerHTML = html;
-    }
+    window.open(issuesUrl, '_blank');
     
-    feedbackList.style.display = 'block';
+    alert('GitHub Issues 페이지가 열립니다.\n제출된 모든 의견을 확인할 수 있습니다!');
 }
 
-// 특정 의견 삭제
+// 특정 의견 삭제 (GitHub에서 직접 삭제)
 function deleteFeedback(id) {
-    if (!confirm('이 의견을 삭제하시겠습니까?')) {
-        return;
-    }
-    
-    let feedbacks = getFeedbacks();
-    feedbacks = feedbacks.filter(f => f.id !== id);
-    
-    localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(feedbacks));
-    
-    // 목록 새로고침
-    viewFeedbacks();
+    alert('GitHub Issues 페이지에서 직접 삭제할 수 있습니다.');
 }
 
-// 모든 의견 삭제
+// 모든 의견 삭제 (GitHub에서 직접 삭제)
 function clearAllFeedbacks() {
-    if (!confirm('모든 의견을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
-        return;
-    }
-    
-    localStorage.removeItem(FEEDBACK_STORAGE_KEY);
-    
-    // 목록 새로고침
-    viewFeedbacks();
+    alert('GitHub Issues 페이지에서 각 의견을 직접 닫거나 삭제할 수 있습니다.');
 }
+
