@@ -1,8 +1,4 @@
-// 의견함 관련 함수들 - Google Forms 사용
-
-// ⚠️ 중요: Google Forms URL을 본인의 것으로 변경하세요!
-// Google Forms 만드는 방법: Google_Forms_설정가이드.md 참고
-const GOOGLE_FORM_URL = 'https://forms.gle/YOUR_FORM_ID';  // ← 여기를 본인의 Google Forms URL로 변경!
+const GOOGLE_FORM_URL = 'https://forms.gle/5HoafmKc9AR96Vjs7';  // ← 여기를 본인의 Google Forms URL로 변경!
 
 // 의견 제출 - Google Forms 페이지로 이동
 function submitFeedback() {
