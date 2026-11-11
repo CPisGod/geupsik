@@ -11,6 +11,8 @@ function updateHomeScreen() {
 
 // 달 변경
 function changeMonth(direction) {
+    // 31일 등에서 월을 넘길 때 날짜가 밀리지 않도록 1일로 맞춘 뒤 이동
+    currentCalendarDate.setDate(1);
     currentCalendarDate.setMonth(currentCalendarDate.getMonth() + direction);
     generateCalendar(currentCalendarDate);
 }
@@ -35,6 +37,7 @@ function generateCalendar(date) {
     const calendarGrid = document.getElementById('calendarGrid');
     calendarGrid.innerHTML = '';
     
+    const dayEls = {}; // YYYYMMDD → 요소 (즐겨찾기 표시용)
     for (let i = 0; i < 42; i++) {
         const currentDay = new Date(startDate);
         currentDay.setDate(startDate.getDate() + i);
@@ -60,6 +63,8 @@ function generateCalendar(date) {
                 dayElement.className += ' today';
             }
             
+            dayEls[formatDateForAPI(currentDay)] = dayElement;
+
             // 클릭 이벤트
             dayElement.addEventListener('click', () => {
                 showMealScreen(currentDay);
@@ -68,4 +73,24 @@ function generateCalendar(date) {
         
         calendarGrid.appendChild(dayElement);
     }
+
+    markFavoriteDays(year, month, dayEls);
+}
+
+// 즐겨찾기 메뉴가 나오는 날에 ⭐ 표시
+async function markFavoriteDays(year, month, dayEls) {
+    if (!getFavorites().length) return;
+    const byDate = await fetchMonthMeals(year, month);
+    // 그 사이 다른 달로 넘어갔다면 무시
+    if (currentCalendarDate.getFullYear() !== year || currentCalendarDate.getMonth() !== month) return;
+    Object.keys(byDate).forEach(key => {
+        const el = dayEls[key];
+        if (!el) return;
+        const hits = new Set();
+        Object.values(byDate[key]).forEach(row => favoritesIn(menuNamesOf(row)).forEach(n => hits.add(n)));
+        if (hits.size) {
+            el.classList.add('has-fav');
+            el.title = [...hits].join(', ');
+        }
+    });
 }

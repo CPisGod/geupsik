@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>급식 정보 앱</title>
+    <meta name="theme-color" content="#e8d5e0">
+    <meta name="description" content="학교 급식 메뉴, 달력, 통계를 한눈에">
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="급식">
     <link rel="icon" type="image/png" href="icon.png">
-    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -74,6 +80,7 @@
             </div>
             
             <div class="date-header" id="mealDate">2025.09.01</div>
+            <button class="share-button" onclick="shareMeal()">📤 이 날 급식 공유하기</button>
             
             <div id="mealContainer">
                 <div class="meal-section" data-meal-type="1">
@@ -123,6 +130,43 @@
                 </div>
             </div>
         </div>
+
+        <!-- 통계 화면 -->
+        <div id="statsScreen" class="screen stats-screen">
+            <div class="date-header">급식 통계</div>
+            <div class="navigation">
+                <button class="nav-button" onclick="changeStatsMonth(-1)">◀ 이전 달</button>
+                <button class="nav-button" onclick="changeStatsMonth(1)">다음 달 ▶</button>
+            </div>
+            <div class="stats-month" id="statsMonth">2025.01</div>
+            <div id="statsBody"></div>
+        </div>
+
+        <!-- 설정 화면 -->
+        <div id="settingsScreen" class="screen settings-screen">
+            <div class="date-header">설정</div>
+
+            <div class="stats-card">
+                <h3>🎨 테마</h3>
+                <div id="themePicker" class="theme-picker"></div>
+            </div>
+
+            <div class="stats-card">
+                <h3>⭐ 좋아하는 메뉴</h3>
+                <div id="favList" class="fav-list"></div>
+                <div class="fav-add">
+                    <input type="text" id="favInput" placeholder="예: 돈까스" maxlength="30">
+                    <button class="admin-button" onclick="addFavoriteFromInput()">추가</button>
+                </div>
+                <button class="submit-button" id="notifyBtn" onclick="toggleNotify()">🔔 알림 켜기</button>
+                <div class="stats-sub" id="notifyStatus"></div>
+            </div>
+
+            <div class="stats-card">
+                <h3>📲 홈 화면에 설치</h3>
+                <div class="stats-sub">브라우저 메뉴에서 "홈 화면에 추가"(iPhone은 공유 → 홈 화면에 추가)를 선택하면 앱처럼 쓰고, 한 번 불러온 급식은 오프라인에서도 볼 수 있어요.</div>
+            </div>
+        </div>
     </div>
 
     <!-- 동그란 네비게이션 버튼들 -->
@@ -136,8 +180,18 @@
         <button class="floating-button" onclick="showFeedbackScreen()" title="의견함">
             💬
         </button>
+        <button class="floating-button" onclick="showStatsScreen()" title="통계">
+            📊
+        </button>
+        <button class="floating-button" onclick="showSettingsScreen()" title="설정">
+            ⚙️
+        </button>
     </div>
 
+    <script src="data.js"></script>
+    <script src="theme.js"></script>
+    <script src="stats.js"></script>
+    <script src="settings.js"></script>
     <script src="home.js"></script>
     <script src="meal.js"></script>
     <script src="feedback.js"></script>

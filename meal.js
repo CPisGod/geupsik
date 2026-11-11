@@ -1,6 +1,7 @@
 // 급식화면 관련 변수
 let currentDate = new Date();
 let selectedDate = new Date();
+let lastMealData = null; // 공유 기능에서 사용
 
 // 급식 데이터 가져오기
 async function fetchMealData(date) {
@@ -100,10 +101,12 @@ function displayMealInfo(mealData) {
                 
                 // 메뉴 항목들 표시
                 menuItems.forEach(item => {
-                    html += `<div class="meal-item">
-                        <span class="menu-name">${item.name}</span>`;
+                    const fav = isFavorite(item.name);
+                    html += `<div class="meal-item${fav ? ' is-fav' : ''}">
+                        <button class="fav-star" title="즐겨찾기" aria-pressed="${fav}" data-name="${encodeURIComponent(item.name)}">${fav ? '⭐' : '☆'}</button>
+                        <span class="menu-name">${escapeHtml(item.name)}</span>`;
                     if (item.allergy) {
-                        html += ` <span class="allergy-info">(${item.allergy})</span>`;
+                        html += ` <span class="allergy-info">(${escapeHtml(item.allergy)})</span>`;
                     }
                     html += `</div>`;
                 });
@@ -114,9 +117,60 @@ function displayMealInfo(mealData) {
                 }
                 
                 container.innerHTML = html;
+                container.querySelectorAll('.fav-star').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const on = toggleFavorite(decodeURIComponent(btn.dataset.name));
+                        btn.textContent = on ? '⭐' : '☆';
+                        btn.setAttribute('aria-pressed', on);
+                        btn.closest('.meal-item').classList.toggle('is-fav', on);
+                    });
+                });
             }
         });
     }
+}
+
+// 오늘의 급식을 공유용 텍스트로 만들기
+function buildShareText(date, mealData) {
+    const lines = [`🍚 ${formatDateForDisplay(date)} 급식`];
+    ['1', '2', '3'].forEach(code => {
+        const row = (mealData || []).find(m => m.MMEAL_SC_CODE === code);
+        if (!row) return;
+        const cal = extractCalories(row.CAL_INFO);
+        lines.push('', `[${MEAL_NAMES[code]}]${cal ? ` ${cal}Kcal` : ''}`);
+        menuNamesOf(row).forEach(n => lines.push(`· ${n}`));
+    });
+    return lines.join('\n');
+}
+
+async function shareMeal() {
+    if (!lastMealData) { showToast('공유할 급식 정보가 없어요'); return; }
+    const text = buildShareText(currentDate, lastMealData);
+    try {
+        if (navigator.share) {
+            await navigator.share({ title: '오늘의 급식', text });
+            return;
+        }
+        await navigator.clipboard.writeText(text);
+        showToast('📋 급식 정보를 복사했어요. 붙여넣어 공유하세요!');
+    } catch (e) {
+        if (e && e.name === 'AbortError') return; // 사용자가 공유 취소
+        // 클립보드 접근 불가 시 마지막 수단
+        window.prompt('아래 내용을 복사해서 공유하세요', text);
+    }
+}
+
+function showToast(msg) {
+    let el = document.getElementById('toast');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'toast';
+        document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => el.classList.remove('show'), 2500);
 }
 
 // 날짜 변경
@@ -136,7 +190,10 @@ async function updateMealScreen() {
     });
     
     // 급식 데이터 가져오기 및 표시
+    const requested = currentDate.getTime();
     const mealData = await fetchMealData(currentDate);
+    if (requested !== currentDate.getTime()) return; // 빠르게 날짜를 넘긴 경우 이전 응답 무시
+    lastMealData = mealData;
     displayMealInfo(mealData);
 }
 
