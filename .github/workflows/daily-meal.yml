@@ -1,0 +1,34 @@
+name: 오늘의 급식 알림
+
+on:
+  schedule:
+    # 평일 오전 7:30 (KST). cron은 UTC 기준이라 일~목 22:30 = 월~금 07:30 KST
+    - cron: '30 22 * * 0-4'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: '전송 없이 출력만 (1 = 켜기)'
+        default: ''
+      date:
+        description: '테스트용 날짜 YYYYMMDD (비우면 오늘)'
+        default: ''
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: 급식 전송
+        run: node bot/send-meal.mjs
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+          DATE: ${{ inputs.date }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+          KAKAO_REFRESH_TOKEN: ${{ secrets.KAKAO_REFRESH_TOKEN }}
+          APP_URL: ${{ vars.APP_URL }}

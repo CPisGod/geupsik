@@ -63,6 +63,23 @@ function showFeedbackScreen() {
     document.getElementById('feedbackList').style.display = 'none';
 }
 
+// 통계 화면 표시
+function showStatsScreen() {
+    hideAllScreens();
+    updateFloatingButtons(3);
+    document.getElementById('statsScreen').style.display = 'block';
+    statsDate = new Date();
+    updateStatsScreen();
+}
+
+// 설정 화면 표시
+function showSettingsScreen() {
+    hideAllScreens();
+    updateFloatingButtons(4);
+    document.getElementById('settingsScreen').style.display = 'block';
+    updateSettingsScreen();
+}
+
 // 홈 화면 표시 (달력 화면)
 function showHomeScreen() {
     showCalendarScreen();
@@ -87,4 +104,12 @@ function showCalendar() {
 // 초기 로드 - 오늘의 급식을 먼저 표시
 window.addEventListener('load', () => {
     showTodayMeal();
+    checkFavoriteAlerts(false);
 });
+
+// PWA: 서비스워커 등록 (file:// 이나 미지원 환경에서는 건너뜀)
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.warn('서비스워커 등록 실패:', err));
+    });
+}
