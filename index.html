@@ -115,19 +115,11 @@
         <!-- 의견함 화면 -->
         <div id="feedbackScreen" class="screen feedback-screen">
             <div class="date-header">의견함</div>
-            
-            <div class="feedback-form">
-                <h3>의견 작성</h3>
-                <textarea id="feedbackText" placeholder="의견을 작성해주세요..." rows="5"></textarea>
-                <button class="submit-button" onclick="submitFeedback()">제출하기</button>
-            </div>
 
-            <div class="admin-section">
-                <h3>관리자 전용</h3>
-                <div class="admin-login">
-                    <input type="password" id="adminPassword" placeholder="관리자 비밀번호">
-                    <button class="admin-button" onclick="viewFeedbacks()">의견 확인</button>
-                </div>
+            <div class="stats-card">
+                <h3>💬 의견 보내기</h3>
+                <div class="stats-sub">의견은 구글 폼으로 받고 있어요. 아래 버튼을 누르면 구글 폼이 열려요.</div>
+                <button class="submit-button" onclick="openFeedbackForm()">구글 폼 열기</button>
             </div>
         </div>
 

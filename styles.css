@@ -656,3 +656,4 @@ body {
 }
 .fav-add .admin-button { background-color: var(--accent); }
 .fav-add .admin-button:hover { background-color: var(--accent-hover); }
+.stats-card .submit-button { margin-top: 14px; }

@@ -58,9 +58,6 @@ function showFeedbackScreen() {
     hideAllScreens();
     updateFloatingButtons(2);
     document.getElementById('feedbackScreen').style.display = 'block';
-    // 의견함으로 전환 시 비밀번호 입력창과 목록 초기화
-    document.getElementById('adminPassword').value = '';
-    document.getElementById('feedbackList').style.display = 'none';
 }
 
 // 통계 화면 표시
