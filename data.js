@@ -8,15 +8,17 @@ const MEAL_NAMES = { '1': '조식', '2': '중식', '3': '석식' };
 const MONTH_CACHE_MS = 6 * 60 * 60 * 1000; // 6시간
 
 // localStorage 안전 래퍼 (시크릿 모드 등에서 예외 방지)
+// 같은 출처(github.io)의 다른 앱과 키가 겹치지 않도록 접두어를 붙임
+const STORE_PREFIX = 'geupsik:';
 const store = {
     get(key, fallback) {
         try {
-            const v = localStorage.getItem(key);
+            const v = localStorage.getItem(STORE_PREFIX + key);
             return v === null ? fallback : JSON.parse(v);
         } catch (e) { return fallback; }
     },
     set(key, value) {
-        try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* 무시 */ }
+        try { localStorage.setItem(STORE_PREFIX + key, JSON.stringify(value)); } catch (e) { /* 무시 */ }
     }
 };
 

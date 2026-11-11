@@ -2,6 +2,7 @@
 const VERSION = 'v1';
 const SHELL_CACHE = `geupsik-shell-${VERSION}`;
 const API_CACHE = 'geupsik-api';
+const PREFS_CACHE = 'geupsik-prefs';
 const SHELL = [
     './', 'index.html', 'styles.css', 'manifest.json',
     'app.js', 'data.js', 'theme.js', 'home.js', 'meal.js', 'stats.js', 'settings.js', 'feedback.js',
@@ -39,7 +40,7 @@ self.addEventListener('fetch', e => {
     // 같은 출처 정적 파일: 캐시 우선 + 백그라운드 갱신 (stale-while-revalidate)
     if (url.origin === self.location.origin) {
         e.respondWith(
-            caches.match(req).then(cached => {
+            caches.match(req, { cacheName: SHELL_CACHE }).then(cached => {
                 const network = fetch(req).then(res => {
                     if (res.ok) { const copy = res.clone(); caches.open(SHELL_CACHE).then(c => c.put(req, copy)); }
                     return res;
@@ -65,7 +66,7 @@ self.addEventListener('periodicsync', e => {
 });
 
 async function checkFavoritesInBackground() {
-    const prefsRes = await (await caches.open('geupsik-prefs')).match('prefs.json');
+    const prefsRes = await (await caches.open(PREFS_CACHE)).match('prefs.json');
     if (!prefsRes) return;
     const { favorites = [], notifyOn } = await prefsRes.json();
     if (!notifyOn || !favorites.length) return;
@@ -85,7 +86,7 @@ async function checkFavoritesInBackground() {
     }));
     if (!hits.size) return;
 
-    const notified = await caches.open('geupsik-prefs');
+    const notified = await caches.open(PREFS_CACHE);
     if (await notified.match(`notified-${ymd}`)) return; // 하루 한 번만
     await notified.put(`notified-${ymd}`, new Response('1'));
     await self.registration.showNotification('⭐ 좋아하는 메뉴 등장', {

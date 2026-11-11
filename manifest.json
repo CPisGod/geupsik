@@ -2,6 +2,7 @@
   "name": "급식 정보 앱",
   "short_name": "급식",
   "description": "학교 급식 메뉴, 달력, 통계를 한눈에",
+  "id": "./index.html",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
